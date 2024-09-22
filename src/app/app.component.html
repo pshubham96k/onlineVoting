@@ -1,0 +1,45 @@
+
+
+    <div class="div" *ngIf="showNavButton==0">
+        <button (click)="show(1)">Register</button>
+        <button (click)="show(2)" >Login</button>
+        <button>About</button>
+    </div>
+   
+    
+    <app-voter-registration *ngIf="whatToShow==1"></app-voter-registration>
+     <app-voter-login *ngIf="whatToShow==2"></app-voter-login>
+<div *ngIf="isLogSucess==1">
+    <app-voter-dash-board></app-voter-dash-board>
+</div> 
+<div *ngIf="isLogSucess==2">
+    <app-admin-dash-board></app-admin-dash-board>
+</div>
+
+
+
+
+
+
+<!-- <header>
+  <div class="container">
+    <div class="logo-box">
+      <a href="/">
+        <img src="https://html5book.ru/wp-content/uploads/2015/01/logo-header.png">
+      </a>
+    </div>
+    <nav>
+    <ul>
+      <li><a href="">home</a></li>
+      <li><a href="">Login</a></li>
+      <li><a href="">product</a></li>
+      <li><a href="">about</a></li>
+      <li><a href="">contact</a></li>
+   </ul>
+  </nav>
+  </div>
+</header> -->
+
+
+<router-outlet></router-outlet>
+    

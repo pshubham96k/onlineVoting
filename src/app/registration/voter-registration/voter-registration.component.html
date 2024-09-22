@@ -1,0 +1,212 @@
+   
+   
+  <div class="registration-container">
+          <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+            <h2>registrationForm</h2>
+            <mat-form-field appearance="fill">
+              <mat-label>Full Name</mat-label>
+              <input matInput formControlName="fullName" [(ngModel)]="voterRegister.fullName">
+              <mat-error *ngIf="registrationForm.get('fullName').errors?.['required']">
+                Full Name is required
+              </mat-error>
+            </mat-form-field>
+
+<br>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Gender</mat-label>
+            <input matInput formControlName="gender" [(ngModel)]="voterRegister.gender">
+            <mat-error *ngIf="registrationForm.get('gender').errors?.['required']">
+                    Gender is required
+            </mat-error>
+          </mat-form-field>
+
+<br>
+
+        <mat-form-field appearance="fill">
+          <mat-label>State</mat-label>
+          <mat-select formControlName="state" [(ngModel)]="selectedState" (selectionChange)="getAllDistrictInState()" >
+            <mat-option *ngFor="let state of states" [value]="state.statename">
+              {{state.statename}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="registrationForm.get('state').errors?.['required']">
+            State is required
+          </mat-error>
+        </mat-form-field>
+          
+<br>
+  
+        <mat-form-field appearance="fill">
+          <mat-label>District</mat-label>
+          <mat-select formControlName="district" [(ngModel)]="selectedDistrict" (selectionChange)="getAllTalukaInDistrict()">
+            <mat-option *ngFor="let district of districts" [value]="district.districtName">
+              {{district.districtName}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="registrationForm.get('district').errors?.['required']">
+            District is required
+          </mat-error>
+        </mat-form-field>
+
+<br>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Taluka</mat-label>
+          <mat-select formControlName="taluka" [(ngModel)]="selectedTaluka" (selectionChange)="getAllVillegeInTaluka()">
+            <mat-option>---Select Taluka---</mat-option>
+            <mat-option *ngFor="let taluka of talukas" [value]="taluka.talukaName">
+              {{taluka.talukaName}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+<br>
+      <mat-form-field appearance="fill">
+        <mat-label>Village</mat-label>
+        <mat-select formControlName="village" [(ngModel)]="selectedVillege">
+          <mat-option>---Select Village---</mat-option>
+          <mat-option *ngFor="let village of villeges" [value]="village.villegeName">
+            {{village.villegeName}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+<br>
+          <mat-form-field appearance="fill">
+            <mat-label>Pincode</mat-label>
+            <input matInput formControlName="pincode" required pattern="^\d{6}$" [(ngModel)]="voterRegister.pincode">
+            <mat-error *ngIf="registrationForm.get('pincode').errors?.['required']">
+              Pincode is required.
+            </mat-error>
+            <mat-error *ngIf="registrationForm.get('pincode').errors?.['pincode']">
+              Pincode must be 6 digits.
+            </mat-error>
+          </mat-form-field>
+
+<br>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Email</mat-label>
+              <input matInput formControlName="email" [(ngModel)]="voterRegister.email_id">
+              <mat-error *ngIf="registrationForm.get('email').errors?.['required']">
+                Email is required
+              </mat-error>
+              <mat-error *ngIf="registrationForm.get('email').errors?.['email']">
+                Please enter a valid email
+              </mat-error>
+            </mat-form-field>
+
+<br>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Aadhar Card Number</mat-label>
+            <input matInput
+                   formControlName="adharCardNumber"
+                   placeholder="0000 0000 0000"
+                   mask="0000 0000 0000"
+                   [(ngModel)]="voterRegister.adharCardNumber">
+            <mat-error *ngIf="registrationForm.get('adharCardNumber').errors?.['required']">
+              Aadhar Card Number is required.
+            </mat-error>
+          </mat-form-field>
+
+     <br>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Password</mat-label>
+              <input matInput formControlName="password" type="password" [(ngModel)]="voterRegister.password">
+              <mat-error *ngIf="registrationForm.get('password').errors?.['required']">
+                Password is required
+              </mat-error>
+              <mat-error *ngIf="registrationForm.get('password').errors?.['minLength']">
+                Password must be at least 6 characters
+              </mat-error>
+            </mat-form-field>
+
+          <br>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Confirm Password</mat-label>
+              <input matInput formControlName="confirmPassword" type="password" [(ngModel)]="voterRegister.comfirm_password">
+              <mat-error *ngIf="registrationForm.get('confirmPassword').errors?.['required']">
+                Confirming password is required
+              </mat-error>
+              <mat-error *ngIf="registrationForm.errors?.['passwordMismatch']">
+                Passwords must match
+              </mat-error>
+            </mat-form-field>
+
+          <br>
+
+            <button mat-button class="custom-button" color="accent" type="submit" [disabled]="!registrationForm.valid" (click)="RegisterVoter()">Register</button>
+          </form>
+    </div>
+              
+      
+
+
+
+
+
+
+
+
+
+
+   
+        <!-- FullName : <br>
+        <input type="text" placeholder="Enter Your full name" [(ngModel)]="voterRegister.fullName" required>  <br>
+        Gender : <br>
+        <input type="text" placeholder="Enter Your gender" [(ngModel)]="voterRegister.gender"> <br>
+        
+        <label>State</label> <br>
+        <select [(ngModel)]="selectedState" (change)="getAllDistrictInState()">
+                <option>---Select State---</option>
+                <option *ngFor="let state of states" [value]="state.statename">
+                        {{state.statename}}
+                </option>
+        </select>
+        <br>
+
+        <label>District</label> <br>
+        <select  [(ngModel)]="selectedDistrict" (change)="getAllTalukaInDistrict()">
+                <option>---Select District---</option>
+                <option [value]="district.districtName" *ngFor="let district of districts">
+                 {{district.districtName}}
+                </option>
+        </select>
+        <br>
+        
+        <label>Taluka</label> <br>
+        <select [(ngModel)]="selectedTaluka" (change)="getAllVillegeInTaluka()">
+                <option>---Select Taluka---</option>
+                <option *ngFor="let taluka of talukas" [value]="taluka.talukaName">
+                 {{taluka.talukaName}}
+                </option>
+        </select>
+        <br>
+
+        <label>Villege</label> <br>
+        <select [(ngModel)]="selectedVillege">
+                <option>---Select Villege---</option>
+                <option *ngFor="let villege of villeges">
+                        {{villege.villegeName}}
+                </option>
+        </select>
+         <br>
+        
+        Pincode : <br>
+        <input type="text" placeholder="Enter pincode" [(ngModel)]="voterRegister.pincode"> <br>
+        Adhar Card Number : <br>
+        <input type="text" placeholder="0000-0000-0000" [(ngModel)]="voterRegister.adharCardNumber"> <br>
+        Email id : <br>
+        <input type="email" placeholder="This is your username" [(ngModel)]="voterRegister.email_id"> <br>
+        Password : <br>
+        <input type="password" placeholder="Enter password" [(ngModel)]="voterRegister.password"> <br>
+        Comfirm password : <br>
+        <input type="password" (blur)="passwordConfirmation($event)" placeholder="Com form Your Password" [(ngModel)]="voterRegister.comfirm_password"> <br>
+        <p *ngIf="isErrorShow==1" style="color: chocolate;">{{ errorMsg }}</p>
+        <p *ngIf="isErrorShow==2" style="color: crimson;">{{ errorMsg }}</p>
+        <button (click)="RegisterVoter()">Submit</button> -->
+      

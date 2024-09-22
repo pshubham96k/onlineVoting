@@ -1,0 +1,302 @@
+<p>admin-dash-board works!</p>
+<p>WelCome Dear &nbsp;{{this.voterServ.getVoter().fullName}}</p>
+
+<br>
+<label>AddData</label>
+<select [(ngModel)]="AddDataType">
+    <option>AddState</option>
+    <option>AddDistrict</option>
+    <option>AddTaluka</option>
+    <option>AddVillege</option>
+</select>
+
+<div *ngIf="AddDataType=='AddState'">
+    StateName : 
+    <input type="text" [(ngModel)]="state.statename"> <br>
+    <!-- PinCode :
+    <input type="text" [(ngModel)]="state.pincode"> <br> -->
+    <button (click)="AddData()">Add</button>
+</div> <br>
+
+<div *ngIf="AddDataType=='AddDistrict'">
+    District Name :
+    <input type="text" [(ngModel)]="district.districtName" required> <br>
+    <!-- Pincode :
+    <input type="number" [(ngModel)]="district.pincode"> <br> -->
+    <button (click)="addDistrict()">Add</button>
+</div>
+<div *ngIf="AddDataType=='AddTaluka'">
+    Taluka Name :
+    <input type="text" [(ngModel)]="taluka.talukaName"> <br>
+    <!-- pincode :
+    <input type="text" [(ngModel)]="taluka.pincode"> <br> -->
+    <button (click)="addTaluka()">Add</button>
+</div>
+<div *ngIf="AddDataType=='AddVillege'">
+    Villege Name :
+    <input type="text" [(ngModel)]="villege.villegeName"> <br>
+    <!-- Pincode : 
+    <input type="text" [(ngModel)]="villege.pincode"> <br> -->
+    <button (click)="AddVillege()">Add</button>
+</div>
+<br> 
+
+<button (click)="toggleButton()">CurrentElection</button>
+        <div *ngIf="showButtons">
+            <button (click)="loadForm()">Add VillageElection</button>
+            <button title="member of the legislative assembly">Add MLA_Election</button>
+        </div>
+<br>
+
+<div *ngIf="toggleForm">
+        Title : <br>
+        <textarea  [(ngModel)]="elections.description"></textarea> <br>
+        State : <br>
+        <input type="text" [(ngModel)]="elections.state"> <br>
+        District : <br>
+        <input type="text" [(ngModel)]="elections.district"> <br>
+        Taluka : <br>
+        <input type="text" [(ngModel)]="elections.taluka"> <br>
+        Villege : <br>
+        <input type="text" [(ngModel)]="elections.villege"> <br>
+        StartDate : <br>
+        <input type="datetime-local" [(ngModel)]="elections.startDate"> <br>
+        EndDate : <br>
+        <input type="datetime-local" [(ngModel)]="elections.endDate"> <br>
+        <button (click)="addElection()">AddElection</button>
+</div>
+ <br>
+
+ <input type="number" placeholder="Enter the pincode" [(ngModel)]="UIPincode"> 
+ <button (click)="getVillegee()">getVilleges</button> <br>
+ <select [(ngModel)]="selectedVillege">
+     <option>--Select Villege--</option>
+     <option *ngFor="let block of uniqueBlocks">{{block}}</option>
+   </select>
+   <br>
+
+<button (click)="loadCandidateResult()">Load Result</button>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Sr no.</th>
+            <th>Candidate Name</th>
+            <th>politicalParty</th>
+            <th>VotingCount</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let candidate of candidateResult; let i=index">
+            <td>{{i+1}}</td>
+            <td>{{candidate.candidateName}}</td>
+            <td>{{candidate.politicalParty}}</td>
+            <td> {{candidate.vote}}</td>
+        </tr>
+    </tbody>
+ </table>
+
+
+ <button class="btn btn-info mb-4" (click)="getVotingStatus()">Voting Status</button>
+ <div class="table-responsive" *ngIf="isVotingStatusVisible">
+    <table class="table table-striped custom-table">
+        <thead class="table-primary">
+            <tr>
+                <th class="title-column">Title</th>
+                <th class="count-column">Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Total number of voters who voted</td>
+                <td>{{ voterVotedCount }}</td>
+            </tr>
+            <tr>
+                <td>Total number of voters who have not voted</td>
+                <td>{{ totalVoterCount - voterVotedCount }}</td>
+            </tr>
+            <tr>
+                <td>Total number of registered voters</td>
+                <td>{{ totalVoterCount }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<br>
+
+ <button (click)="UnverifyCandidateButtons()">UnverifyCandidate</button>
+        <div *ngIf="showUnverifyCandidateButtons">
+            <!-- <button>UnverifyVillegeCandidate</button> -->
+            <button (click)="CandidateVerification()" title="Candidate Verification">UnverifyVillegeCandidate</button>
+            <button>UnverifyMLA_Candidate</button>
+        </div>
+
+ <table class="table table-striped">
+    <thead>
+        <tr>
+            <th>sr.no</th>
+            <th>Name</th>
+            <th>AdharCardNumber</th>
+            <th>Income</th>
+            <th>Age</th>
+            <th>Political_Party</th>
+            <th>State</th>
+            <th>District</th>
+            <th>Taluka</th>
+            <th>Villege</th>
+            <th colspan="2">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let candidateDetail of candidateDetails; let i=index" >
+            <td>{{i+1}}</td>
+            <td>{{candidateDetail.candidateName}}</td>
+            <td>{{candidateDetail.adharCardNumber}}</td>
+            <td>{{candidateDetail.income}}</td>
+            <td>{{candidateDetail.age}}</td>
+            <td>{{candidateDetail.politicalParty}}</td>
+            <td>{{candidateDetail.state}}</td>
+            <td>{{candidateDetail.district}}</td>
+            <td>{{candidateDetail.taluka}}</td>
+            <td>{{candidateDetail.villege}}</td>
+            <td>
+                <button type="button" class="btn btn-success" (click)="candidateAccepted(i)">Accept</button>
+                <button type="button" class="btn btn-danger" (click)="candidateRejected(i)">Reject</button>
+            </td>
+        </tr>
+    </tbody>
+ </table> 
+<br>
+ <button (click)="loadAcceptedCandidateFromDB()">AcceptedCandidate</button>
+ <table class="table table-striped">
+    <thead>
+        <tr>
+            <th>sr.no</th>
+            <th>Name</th>
+            <th>AdharCardNumber</th>
+            <th>Income</th>
+            <th>Age</th>
+            <th>Political_Party</th>
+            <th colspan="2">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let accepted of acceptedCandidate; let i=index" >
+            <td>{{i+1}}</td>
+            <td>{{accepted.candidateName}}</td>
+            <td>{{accepted.adharCardNumber}}</td>
+            <td>{{accepted.income}}</td>
+            <td>{{accepted.age}}</td>
+            <td>{{accepted.politicalParty}}</td>
+            <td>
+                <button type="button" class="btn btn-primary" disabled="" data-bs-toggle="button">Accepted</button>
+            </td>
+        </tr>
+    </tbody>
+ </table>
+ <button (click)="generatePDF()" [disabled]="!isAcceptedCandidateLoaded">Generate Pdf</button>
+
+ <br>
+ <button (click)="loadRejectedCandidate()">RejectedCandidate</button>
+ <table class="table table-striped">
+    <thead>
+        <tr>
+            <th>sr.no</th>
+            <th>Name</th>
+            <th>AdharCardNumber</th>
+            <th>Income</th>
+            <th>Age</th>
+            <th>Political_Party</th>
+            <th colspan="2">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let rejected of rejectedCandidate; let i=index" >
+            <td>{{i+1}}</td>
+            <td>{{rejected.candidateName}}</td>
+            <td>{{rejected.adharCardNumber}}</td>
+            <td>{{rejected.income}}</td>
+            <td>{{rejected.age}}</td>
+            <td>{{rejected.politicalParty}}</td>
+            <td>
+                <button type="button" class="btn btn-primary" disabled="" data-bs-toggle="button">Rejected</button>
+            </td>
+        </tr>
+    </tbody>
+ </table>
+
+
+<!-- ================================================== -->
+
+ <div class="admin-panel">
+    <div class="admin-block">
+      <h3>Current Election</h3>
+      <button class="btn">View</button>
+      <p class="block-content" style="display:none;">Current Election content goes here.</p>
+    </div>
+    <div class="admin-block">
+      <h3>Result</h3>
+      <button class="btn">View</button>
+      <p class="block-content" style="display:none;">Result content goes here.</p>
+    </div>
+    <div class="admin-block">
+      <h3>Voting Status</h3>
+      <button class="btn">View</button>
+      <p class="block-content" style="display:none;">Voting Status content goes here.</p>
+    </div>
+    <div class="admin-block">
+      <h3>Unverify Candidate</h3>
+      <button class="btn">View</button>
+      <p class="block-content" style="display:none;">Unverify Candidate content goes here.</p>
+    </div>
+    <div class="admin-block">
+      <h3>Accepted Candidate</h3>
+      <button class="btn">View</button>
+      <p class="block-content" style="display:none;">Accepted Candidate content goes here.</p>
+    </div>
+    <div class="admin-block">
+        <h3>Rejected Candidate</h3>
+        <button class="btn" (click)="loadRejectedCandidate()">View</button>
+        <div *ngIf="showRejectedCandidates">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>sr.no</th>
+                <th>Name</th>
+                <th>AdharCardNumber</th>
+                <th>Income</th>
+                <th>Age</th>
+                <th>Political_Party</th>
+                <th colspan="2">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let rejected of rejectedCandidate; let i = index">
+                <td>{{i+1}}</td>
+                <td>{{rejected.candidateName}}</td>
+                <td>{{rejected.adharCardNumber}}</td>
+                <td>{{rejected.income}}</td>
+                <td>{{rejected.age}}</td>
+                <td>{{rejected.politicalParty}}</td>
+                <td>
+                  <button type="button" class="btn btn-primary" disabled="">Rejected</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div> 
+</div>
+
+
+
+
+  
+  
+  
+
+  
+  
+
+
+ 

@@ -1,0 +1,253 @@
+<p>voter-dash-board works!</p>
+<p>WelCome Dear  &nbsp;&nbsp;{{  this.voterServ.getVoter().fullName}}</p>
+
+<div class="profile-form-container">
+  <div class="card-header">
+      <button (click)="showProfile()" title="Edit Your Profile">Profile</button>
+  </div>
+  <div class="card-body" *ngIf="isProfileVisible">
+      <!-- Form Group for Full Name -->
+      <div class="form-group">
+          <label for="fullName">Name:</label>
+          <input type="text" id="fullName" [(ngModel)]="updateVoterProfile.fullName">
+      </div>
+
+      <!-- Form Group for AdharCardNumber -->
+      <div class="form-group">
+          <label for="adharCardNumber">AdharCardNumber:</label>
+          <input type="text" id="adharCardNumber" [(ngModel)]="updateVoterProfile.adharCardNumber" readonly>
+      </div>
+      
+      <!-- Other Form Groups Follow -->
+      <div class="form-group">
+          <label for="gender">Gender:</label>
+          <input type="text" id="gender" [(ngModel)]="updateVoterProfile.gender">
+      </div>
+
+      <div class="form-group">
+          <label for="email_id">Email Id:</label>
+          <input type="text" id="email_id" [(ngModel)]="updateVoterProfile.email_id">
+      </div>
+
+      <div class="form-group">
+          <label for="state">State:</label>
+          <input type="text" id="state" [(ngModel)]="updateVoterProfile.state" readonly>
+      </div>
+
+      <div class="form-group">
+          <label for="district">District:</label>
+          <input type="text" id="district" [(ngModel)]="updateVoterProfile.district" readonly>
+      </div>
+
+      <div class="form-group">
+          <label for="taluka">Taluka:</label>
+          <input type="text" id="taluka" [(ngModel)]="updateVoterProfile.taluka" readonly>
+      </div>
+
+      <div class="form-group">
+          <label for="villege">Village:</label>
+          <input type="text" id="villege" [(ngModel)]="updateVoterProfile.villege" readonly>
+      </div>
+
+      <div class="card-header">
+        <button (click)="saveProfile()">Save</button>
+    </div>
+  </div>
+</div>
+
+
+<button (click)="loadCandidate()">Load Candidate</button>
+<table class="table table-striped">
+   <thead>
+        <tr>
+            <th>Sr no.</th>
+            <th>CandidateName</th>
+            <th>PoliticalParty</th>
+            <th>Age</th>
+            <th>Vote</th>
+        </tr>
+   </thead>
+   <tbody>
+        <tr *ngFor="let candidate of allCandidateData; let i=index">
+            <td>{{i+1}}</td>
+            <td>{{candidate.candidateName}}</td>
+            <td>{{candidate.politicalParty}}</td>
+            <td>{{candidate.age}}</td>
+            <td>
+            <button class="btn btn-warning" (click)="voting(i)" [disabled]="this.isVotedValue==1">vote</button>
+            </td>
+        </tr>
+   </tbody>
+</table>
+
+<!-- =================== -->
+
+<div *ngIf="cameraAccessAfterVoting">
+      <div>
+        <button (click)="checkPermmisions()">checkWebCamPermmisions</button> <br>
+          <p *ngIf="status">Status Here : {{status}}</p>
+      </div>
+      
+      <div *ngIf="stream">
+        <webcam [trigger]="$trigger" (imageCapture)="snapshot($event)" [imageQuality]="1"></webcam>
+      <button (click)="captureImage()">{{btnLabel}}</button>
+      </div>
+      
+      <!-- <div *ngIf="previewImage">
+        <img [src]="previewImage" height="250" width="250">
+      </div> -->
+      <button (click)="downloadVoterIdCard()" title="downloadVoterIdCard">VoterIdCard</button>   
+</div>
+
+
+<button (click)="toggleButton()">CurrentElection</button>
+        <div *ngIf="showButtons">
+            <button (click)="LoadCurrentVillegeElections()" (click)="toggleVillegeElectionForm()">VillageElection</button>
+            <button title="member of the legislative assembly">MLA_Election</button>
+        </div>
+  <br>
+
+<div *ngIf="showVillegeElectionForm">
+    <table class="table table-striped">
+    <thead>
+        <tr>
+            <th>sr.no</th>
+            <th>Election Title</th>
+            <th>Start_Date</th>
+            <th>End_Date</th>
+            <th colspan="2">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let election of currentVillegeElection; let i=index" >
+            <td>{{i+1}}</td>
+            <td>{{election.description}}</td>
+            <td>{{election.startDate | date}}</td>
+            <td>{{election.endDate | date}}</td>
+            <td>
+                <button type="button" class="btn btn-success" (click)="toggleForm()">Apply</button>
+            </td>
+        </tr>
+    </tbody>
+ </table>
+</div>
+
+<div *ngIf="showForm">
+    Name : <br>
+    <input type="text" [(ngModel)]="candidate.candidateName"> <br>
+    <!-- Select Image : <br>
+    <input type="file"> <br>
+    <form (submit)="uploadImage()">
+      <input type="file" (change)="onFileSelected($event)">
+      <button type="submit">Upload Image</button>
+    </form> -->
+    AdharCardNumber : <br>
+    <input type="number" [(ngModel)]="candidate.adharCardNumber" [(ngModel)]="voterAdharCardNumber"> <br>
+    Age : <br>
+    <input type="text" [(ngModel)]="candidate.age"> <br>
+    Political Party :  <br>
+    <input type="text" [(ngModel)]="candidate.politicalParty"> <br>
+    <button (click)="candidateEnroll()">submit</button> <br>
+</div>
+
+
+
+<!-- <form [formGroup]="registrationForm" (ngSubmit)="submit()" *ngIf="showForm">
+ 
+  <div class="form-group">
+    <label for="candidateName">Candidate Name:</label>
+    <input type="text" id="candidateName" class="form-control" formControlName="candidateName" placeholder="Enter candidate name" [(ngModel)]="candidate.candidateName">
+  </div>
+
+  
+  <div class="form-group">
+    <label for="adharCardNumber">Adhar Card Number:</label>
+    <input type="text" id="adharCardNumber" class="form-control" formControlName="adharCardNumber" placeholder="Enter adhar card number" [(ngModel)]="candidate.adharCardNumber">
+  </div>
+
+  
+  <div class="form-group">
+    <label for="age">Age:</label>
+    <input type="number" id="age" class="form-control" formControlName="age" placeholder="Enter age" [(ngModel)]="candidate.age">
+  </div>
+
+  
+  <div class="form-group">
+    <label for="politicalParty">Political Party:</label>
+    <input type="text" id="politicalParty" class="form-control" formControlName="politicalParty" placeholder="Enter political party" [(ngModel)]="candidate.politicalParty">
+  </div>
+
+  
+  <div class="form-group">
+    <label for="imageFile">Upload Image:</label>
+    <input type="file" id="imageFile" (change)="onFileSelected($event)">
+  </div>
+
+ 
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form> -->
+
+
+
+
+
+
+
+
+<!-- <button (click)="getCandidate()">ApplicationStatus</button>
+<table class="table" *ngIf="whetherShowStatus==1">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Title</th>
+            <th>politicalParty</th>
+            <th>ApplicationStatus</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>{{candidateStatus.candidateName}}</th>
+            <th>{{candidateStatus?.description}}</th>
+            <th>{{candidateStatus.politicalParty}}</th>
+            <th><button type="button" class="btn btn-outline-success">{{ getVerificationStatus() }} </button></th>
+        </tr>
+    </tbody>
+</table> -->
+
+<button (click)="getCandidate()">ApplicationStatus</button>
+
+<!-- Conditionally display the table or "not applied" message -->
+<div *ngIf="hasClickedApplicationStatus">
+  <div *ngIf="candidateStatus; else noApplicationStatus">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Title</th>
+          <th>Political Party</th>
+          <th>Application Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>{{candidateStatus.candidateName}}</th>
+          <th>{{candidateStatus?.description}}</th>
+          <th>{{candidateStatus.politicalParty}}</th>
+          <th><button type="button" class="btn btn-outline-success">{{ getVerificationStatus() }}</button></th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #noApplicationStatus>
+    <div class="alert alert-info">
+      Yet you are not applied.
+    </div>
+  </ng-template>
+</div>
+
+
+
+<!-- ================ -->
+
+
